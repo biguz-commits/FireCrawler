@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "firecrawl-agent"
+version = "0.1.0"
+description = ""
+authors = ["Tommaso Biganzoli <tommasobiganzoli@gmail.com>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.15"
+ollama = "^0.6.1"
+certifi = "^2026.1.4"
+bs4 = "^0.0.2"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

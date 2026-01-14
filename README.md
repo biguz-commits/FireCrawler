@@ -1,0 +1,1 @@
+![Goal](assets/FireCrawlAgent.drawio.png)
