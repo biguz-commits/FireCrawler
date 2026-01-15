@@ -1,4 +1,4 @@
-from app.llm.tools.BraveAPI import BraveAPI
+from app.services.llm.tools.BraveAPI import BraveAPI
 from dotenv import load_dotenv
 import json
 
