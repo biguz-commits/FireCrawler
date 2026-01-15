@@ -68,6 +68,15 @@ class RagPipeline:
             if chunk.strip()
         }
 
+    @classmethod
+    def get_collection(
+            cls,
+            db_path: str = "/Users/tommasobiganzoli/Desktop/firecrawl-agent/app/db_storage",
+            collection_name: str = "firecrawl-agent",
+    ):
+        client = chromadb.PersistentClient(path=db_path)
+        return client.get_or_create_collection(name=collection_name)
+
     def db_store(self):
         chunks = self.pdf_to_token_chunks()
         if not chunks:
@@ -78,15 +87,4 @@ class RagPipeline:
             documents=list(chunks.values()),
         )
 
-    def db_query(self, q: str, top_k: int = 3):
-        return self.collection.query(
-            query_texts=[q],
-            n_results=top_k
-        )
 
-
-if __name__ == "__main__":
-    pdf_path = "/Users/tommasobiganzoli/Desktop/firecrawl-agent/COVER LETTER.pdf"
-    rag = RagPipeline(pdf_path)
-    rag.db_store()
-    print(rag.db_query("What is this cover letter about?"))

@@ -1,4 +1,4 @@
-from app.services.llm.tools.BraveAPI import BraveAPI
+from app.services.brave.BraveAPI import BraveAPI
 from dotenv import load_dotenv
 import json
 
@@ -19,7 +19,8 @@ params = {
 
 brave = BraveAPI()
 
-async def brave_search(query: str, top_k: int = 10):
+async def brave_search(query: str,
+                       top_k: int = 10):
     """
     :param query: A string for the user query.
     :return: Raw Brave output, or cleaned (LLM-ready) payload.
