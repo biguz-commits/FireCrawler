@@ -1,0 +1,64 @@
+vector_search_task:
+  description: >
+    Receive the user's query "{query}" and perform a semantic search over the vector
+    database using the similarity_search tool.
+
+    Steps:
+    1. Use similarity_search to retrieve the most relevant chunks related to "{query}"
+    2. Analyze the retrieved context
+    3. Produce a grounded answer to "{query}" using ONLY the retrieved information
+    4. If the retrieved data is insufficient, explicitly state the limitations
+
+    Do not hallucinate or introduce external knowledge.
+  expected_output: >
+    A clear and concise answer to "{query}", fully grounded in the vector
+    database results, or an explicit statement explaining why the retrieved context
+    is insufficient to answer the query completely.
+  agent: vector_researcher
+
+review_task:
+  description: >
+    Review the answer generated for the user's query "{query}".
+
+    You receive:
+    - The original user query "{query}"
+    - The answer produced by the vector_search_task
+
+    Your responsibilities:
+    1. Verify that the answer directly addresses "{query}"
+    2. Check relevance, completeness, and factual grounding
+    3. Decide one of the following actions:
+       - If the answer is sufficient: respond directly to the user
+       - If the answer is insufficient or off-topic: request escalation to web research
+
+    Clearly explain the reason for escalation when required.
+  expected_output: >
+    Either:
+    - A final, user-ready answer that satisfactorily addresses "{query}"
+    OR
+    - A clear escalation decision explaining why vector-based information is
+      insufficient and web research is required.
+  agent: reviewer
+  context:
+    - vector_search_task
+
+web_research_task:
+  description: >
+    Perform web-based research to answer the user's query "{query}" ONLY if escalation
+    has been requested by the reviewer.
+
+    Steps:
+    1. Call brave_search exactly once using "{query}" to retrieve relevant URLs
+       and short descriptions
+    2. Select the most relevant sources
+    3. Open each selected URL using html_tool
+    4. Extract and synthesize information to answer "{query}"
+
+    Prefer authoritative sources. Avoid speculation.
+    This is the final step and must answer the user directly.
+  expected_output: >
+    A complete, accurate, and well-supported final answer to "{query}",
+    synthesized from multiple web sources, with clear source mentions.
+  agent: web_researcher
+  context:
+    - review_task
