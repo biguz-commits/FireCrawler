@@ -1,3 +1,5 @@
+from typing import Type
+
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 import json
@@ -30,7 +32,7 @@ class BraveSearchTool(BaseTool):
         "Returns a list of search results as JSON objects containing: "
         "title, url, snippet (page summary), source domain, and page_age (ISO timestamp)."
     )
-    args_schema = BraveSearchInput
+    args_schema: Type[BaseModel] = BraveSearchInput
 
     def _run(self, query: str):
         params["q"] = query

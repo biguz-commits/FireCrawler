@@ -5,19 +5,20 @@ import bs4
 import urllib.request
 import ssl
 import certifi
+from typing import Type
 
 
 class HtmlToolInput(BaseModel):
     url : str = Field(..., description="The url as a string of the html page to be parsed")
 
 class HtmlTool(BaseTool):
-    name = "html_tool"
+    name : str = "html_tool"
     description: str = (
         "Fetch an HTML page from a given URL and extract its main textual content. "
         "Parses the page, collects readable paragraph text (<p> tags) from the main section, "
         "and returns the cleaned text as a single string separated by blank lines."
     )
-    args_schema = HtmlToolInput
+    args_schema: Type[BaseModel] = HtmlToolInput
 
     def _run(self, url: str):
         ctx = ssl.create_default_context(cafile=certifi.where())
